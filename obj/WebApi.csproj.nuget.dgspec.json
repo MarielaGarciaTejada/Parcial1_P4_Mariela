@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[7.1.0, )"
             },
+            "Microsoft.Data.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.12, )"
+            },
             "Scalar.AspNetCore": {
               "target": "Package",
               "version": "[2.17.11, )"

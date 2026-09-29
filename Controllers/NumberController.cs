@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MyApp.Namespace
+namespace WebApi.Namespace
 {
     [Route("api/[controller]")]
     [ApiController]
