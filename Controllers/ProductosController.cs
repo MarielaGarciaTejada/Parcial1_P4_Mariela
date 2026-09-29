@@ -5,7 +5,7 @@ namespace WebApi.Namespace
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Productos : ControllerBase
+    public class ProductosController : ControllerBase
     {
         
     }
