@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "F4nzZ0iFzwQ=",
+  "success": true,
+  "projectFilePath": "C:\\Programación_IV\\Parcial1_P4_Mariela\\WebApi\\WebApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Mariela\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.11\\microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
+    "C:\\Users\\Mariela\\.nuget\\packages\\microsoft.openapi\\2.7.5\\microsoft.openapi.2.7.5.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error al obtener los datos de vulnerabilidad del paquete: No se puede cargar el índice de servicio del origen https://api.nuget.org/v3/index.json.",
+      "projectPath": "C:\\Programación_IV\\Parcial1_P4_Mariela\\WebApi\\WebApi.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Programación_IV\\Parcial1_P4_Mariela\\WebApi\\WebApi.csproj",
+      "targetGraphs": []
+    }
+  ]
+}
