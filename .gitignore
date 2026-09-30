@@ -488,4 +488,5 @@ appsettings.json
 appsettings.Development.json
 
 .vscode/
-.vs
+.vs/
+*.db

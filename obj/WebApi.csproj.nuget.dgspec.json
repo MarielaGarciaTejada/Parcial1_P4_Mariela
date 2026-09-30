@@ -60,10 +60,6 @@
               "target": "Package",
               "version": "[10.0.11, )"
             },
-            "Microsoft.Data.SqlClient": {
-              "target": "Package",
-              "version": "[7.1.0, )"
-            },
             "Microsoft.Data.Sqlite": {
               "target": "Package",
               "version": "[10.0.12, )"
