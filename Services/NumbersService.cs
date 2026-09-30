@@ -48,7 +48,7 @@ public class NumbersService
     public async Task <bool> UpdateAsync(NumberRecord record)
     {
         const string consulta = @"
-            UPDATE NimberRecords
+            UPDATE NumberRecords
             SET Numero = @Numero,
             Resultado = @Resultado,
             Fecha = @Fecha
