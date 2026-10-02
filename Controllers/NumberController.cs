@@ -6,32 +6,28 @@ using WebApi.Services;
 namespace WebApi.Namespace
 {
     [Route("api/[controller]")]
-    [ApiController]  // Primary constructor
-    public class NumberController(NumbersService numbersService) : ControllerBase
+    [ApiController]
+    public class NumberController (NumbersService numbersService): ControllerBase
     {
-        //private readonly NumbersService _numbersService;
-        // servicio
-        //public NumberController(NumbersService numbersService)
+       // private readonly NumbersService _numbersService;
+        //servicio
+       // public NumberController(NumbersService numbersService)
         //{  _numbersService = numbersService; }   
 
         [HttpPost("calcular/{numero:int}")]
         public async Task <IActionResult> Calcular(int numero)
         {
-            var record = new NumberRecord
-            {
-                Numero = numero,
-                Resultado = numero + numero,
-                Fecha = DateTime.Now
-            };
+            var resultado = numero + numero;
+            var calculo = new NumberRecordSet(numero, resultado);
 
-            int nuevoId = await numbersService.SaveAsync(record);
-            record.Id = nuevoId;
+            int nuevoId = await numbersService.SaveAsync(calculo);
+            var record = await numbersService.GetByIdAsync(nuevoId);
             return CreatedAtAction(nameof(GetById), new { id = nuevoId }, record);
         }
 
         //historial completo
         [HttpGet("historial")]
-        public async Task<ActionResult<IEnumerable<NumberRecord>>> GetHistorial()
+        public async Task<ActionResult<IEnumerable<NumberRecordGet>>> GetHistorial()
         {
             var records = await numbersService.GetListAsync();
             return Ok(records);
@@ -39,7 +35,7 @@ namespace WebApi.Namespace
 
         //consulta de calculo por id
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<NumberRecord>> GetById(int id)
+        public async Task<ActionResult<NumberRecordGet>> GetById(int id)
         {
             var record = await numbersService.GetByIdAsync(id);
             if(record is null)
@@ -52,17 +48,17 @@ namespace WebApi.Namespace
 
         //actualiza
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, [FromBody] NumberRecord record)
+        public async Task<ActionResult> Update(int id, [FromBody] NumberRecordSet record)
         {
-            if (id != record.Id)
-            { return BadRequest(new { message = "El Id de la URL no coincide con el id de la petición." }); }
 
-            record.Resultado = record.Numero + record.Numero;
-            record.Fecha = DateTime.Now;
+            var resultado = record.Numero + record.Numero;
+            var registroActualizado = new NumberRecordSet(record.Numero, resultado);
 
-            var updated = await numbersService.UpdateAsync(record);
+            var updated = await numbersService.UpdateAsync(id, registroActualizado);
             if (!updated)
-            { return NotFound(new { message = $"No se encontró el registro con Id {id} para actualizar." }); }
+            { 
+                return NotFound(new { message = $"No se encontró el registro con Id {id} para actualizar." }); 
+            }
 
             return Ok(new { message = $"El registro con Id {id} fue actualizado correctamente." }); 
         }

@@ -31,11 +31,11 @@ public class NumbersService (IConfiguration configuration)
         await connection.ExecuteAsync(consulta);
     }
 
-    public async Task <int> SaveAsync(NumberRecord record)
+    public async Task <int> SaveAsync(NumberRecordSet record)
     {
         const string consulta=@"
         INSERT INTO NumberRecords (Numero, Resultado, Fecha)
-        VALUES (@Numero, @Resultado, @Fecha);
+        VALUES (@Numero, @Resultado, DATETIME('now'));
         SELECT last_insert_rowid();
         ";
 
@@ -43,22 +43,27 @@ public class NumbersService (IConfiguration configuration)
         return await connection.ExecuteScalarAsync<int>(consulta, record);
     }
 
-    public async Task <bool> UpdateAsync(NumberRecord record)
+    public async Task <bool> UpdateAsync(int id, NumberRecordSet record)
     {
         const string consulta = @"
             UPDATE NumberRecords
             SET Numero = @Numero,
             Resultado = @Resultado,
-            Fecha = @Fecha
+            Fecha = DATETIME('now')
             WHERE Id = @Id;
         ";
 
         using var connection = CreateConnection();
-        var filasAfectadas = await connection.ExecuteAsync(consulta, record);
+        var filasAfectadas = await connection.ExecuteAsync(consulta, new
+        {
+            Id = id,
+            record.Numero,
+            record.Resultado
+        });
         return filasAfectadas > 0;
     }
 
-    public async Task <NumberRecord?> GetByIdAsync(int id)
+    public async Task <NumberRecordGet?> GetByIdAsync(int id)
     {
         const string consulta = @"
             SELECT Id, Numero, Resultado, Fecha
@@ -67,10 +72,10 @@ public class NumbersService (IConfiguration configuration)
         ";
 
         using var connection = CreateConnection();
-        return await connection.QuerySingleOrDefaultAsync<NumberRecord>(consulta, new { Id = id });
+        return await connection.QuerySingleOrDefaultAsync<NumberRecordGet>(consulta, new { Id = id });
     }
 
-    public async Task<IEnumerable<NumberRecord>> GetListAsync()
+    public async Task<IEnumerable<NumberRecordGet>> GetListAsync()
     {
         const string consulta = @"
             SELECT Id, Numero, Resultado, Fecha
@@ -79,7 +84,7 @@ public class NumbersService (IConfiguration configuration)
         ";
 
         using var connection = CreateConnection();
-        return await connection.QueryAsync<NumberRecord>(consulta);
+        return await connection.QueryAsync<NumberRecordGet>(consulta);
     }
 
     public async Task<bool> DeleteAsync(int id)

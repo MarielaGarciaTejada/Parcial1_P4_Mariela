@@ -484,9 +484,6 @@ $RECYCLE.BIN/
 bin/
 obj/
 
-appsettings.json
-appsettings.Development.json
-
 .vscode/
 .vs/
 *.db
