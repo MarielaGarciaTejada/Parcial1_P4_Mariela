@@ -6,14 +6,13 @@ using WebApi.Services;
 namespace WebApi.Namespace
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class NumberController : ControllerBase
+    [ApiController]  // Primary constructor
+    public class NumberController(NumbersService numbersService) : ControllerBase
     {
-        private readonly NumbersService _numbersService;
+        //private readonly NumbersService _numbersService;
         // servicio
-        public NumberController(NumbersService numbersService)
-        {  _numbersService = numbersService; }   
-
+        //public NumberController(NumbersService numbersService)
+        //{  _numbersService = numbersService; }   
 
         [HttpPost("calcular/{numero:int}")]
         public async Task <IActionResult> Calcular(int numero)
@@ -25,7 +24,7 @@ namespace WebApi.Namespace
                 Fecha = DateTime.Now
             };
 
-            int nuevoId = await _numbersService.SaveAsync(record);
+            int nuevoId = await numbersService.SaveAsync(record);
             record.Id = nuevoId;
             return CreatedAtAction(nameof(GetById), new { id = nuevoId }, record);
         }
@@ -34,7 +33,7 @@ namespace WebApi.Namespace
         [HttpGet("historial")]
         public async Task<ActionResult<IEnumerable<NumberRecord>>> GetHistorial()
         {
-            var records = await _numbersService.GetListAsync();
+            var records = await numbersService.GetListAsync();
             return Ok(records);
         }
 
@@ -42,7 +41,7 @@ namespace WebApi.Namespace
         [HttpGet("{id:int}")]
         public async Task<ActionResult<NumberRecord>> GetById(int id)
         {
-            var record = await _numbersService.GetByIdAsync(id);
+            var record = await numbersService.GetByIdAsync(id);
             if(record is null)
             {
                 return NotFound(new { message = $"No se encontró el registro con ID {id}." });
@@ -59,9 +58,9 @@ namespace WebApi.Namespace
             { return BadRequest(new { message = "El Id de la URL no coincide con el id de la petición." }); }
 
             record.Resultado = record.Numero + record.Numero;
-            record.Fecha = DateTime.UtcNow;
+            record.Fecha = DateTime.Now;
 
-            var updated = await _numbersService.UpdateAsync(record);
+            var updated = await numbersService.UpdateAsync(record);
             if (!updated)
             { return NotFound(new { message = $"No se encontró el registro con Id {id} para actualizar." }); }
 
@@ -72,10 +71,11 @@ namespace WebApi.Namespace
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var record = await _numbersService.GetByIdAsync(id);
+            var record = await numbersService.GetByIdAsync(id);
             if (record is null)
             { return NotFound(new { message = $"No se encontró el registro con Id {id} para eliminar." }); }
 
+            await numbersService.DeleteAsync(id);
             return Ok(new { message = $"El registro con Id {id} fue eliminado correctamente." });
         }
 

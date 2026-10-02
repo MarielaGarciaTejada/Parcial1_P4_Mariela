@@ -5,15 +5,13 @@ using WebApi.Models;
 
 namespace WebApi.Services;
 
-public class NumbersService
+// Primary constructor
+public class NumbersService (IConfiguration configuration)
 {
-    // cadena de conexion
-    private readonly string _connectionString;
-    public NumbersService(IConfiguration configuration)
-    {
-        _connectionString = configuration.GetConnectionString("SqlLiteConnection")
+    //cadena de conexión
+    private readonly string _connectionString = configuration.GetConnectionString("SqlLiteConnection")
         ?? throw new InvalidOperationException("No se encontro la cadena SqlLiteConnection ");
-    }
+    
     private IDbConnection CreateConnection() => new SqliteConnection(_connectionString);
 
     public async Task InitializeAsync ()
@@ -95,6 +93,5 @@ public class NumbersService
         var filasAfectadas = await connection.ExecuteAsync(consulta, new { Id = id });
         return filasAfectadas > 0;
     }
-
 
 }

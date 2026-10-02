@@ -1,6 +1,6 @@
 namespace WebApi.Models;
 
-public class NumberRecord
+public record NumberRecord
 {
     public int Id { get; set; }
     public int Numero { get; set; }
